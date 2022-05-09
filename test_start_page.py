@@ -13,6 +13,7 @@ def random_symbol(prefix, maxlen):
 
 
 class TestStartPage:
+
     log = logging.getLogger("[StartPage]")
 
     # def test_empty_fields_login(self):
@@ -105,6 +106,7 @@ class TestStartPage:
     #
     #     # Close driver
     #     driver.close()
+
 
     def test_registration(self):
         """
