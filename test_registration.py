@@ -123,6 +123,7 @@ class TestStartPage:
         # Close driver
         driver.close()
 
+
     def test_empty_fill_username(self):
         """
         - Create driver
@@ -142,7 +143,7 @@ class TestStartPage:
         driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
 
         # Fill empty field username
-        self.log.info("Fill 2 symbols on field username")
+        self.log.info("Filling empty field username")
         # - Find element
         username_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Pick a username']")
         username_field.clear()
