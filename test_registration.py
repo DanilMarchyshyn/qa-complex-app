@@ -230,3 +230,111 @@ class TestStartPage:
 
         # Close driver
         driver.close()
+
+    def test_fill_more_30sym_username(self):
+        """
+        - Create driver
+        - Open start page
+        - Filling 31 symbols username field
+        - Fill field random Email
+        - Fill field  password
+        - Click on 'Sign up for OurApp' button
+        - Verifying error message
+        """
+
+        # Create driver
+        driver = WebDriver(executable_path="chromedriver")
+
+        # Open start page
+        self.log.info("Opening start page")
+        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
+
+        # Fill field random 31 symbols username
+        self.log.info("Filling 31 symbols username field")
+        # - Find element
+        username_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Pick a username']")
+        username_field.send_keys("username12345678901234567890123")
+        sleep(1)
+
+        # Fill field random Email
+        self.log.info("Filling email field")
+        # - Find element
+        email_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='you@example.com']")
+        email = random_symbol("Test", 10) + "@yopmail.com"
+        email_field.send_keys(email)
+        sleep(1)
+
+        # Fill field  password
+        self.log.info("Filling password field")
+        # - Find element
+        password_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Create a password']")
+        password_field.send_keys("P@ssw0rdP@ssw0rd")
+        sleep(1)
+
+        # Click on 'Sign up for OurApp' button
+        self.log.info("Going to click 'Sign up for OurApp' button")
+        driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
+        sleep(1)
+
+        # Verify error message
+        self.log.info("Verifying error message")
+        error_message = driver.find_element(by=By.XPATH,
+                                            value=".//div[@class='alert alert-danger small liveValidateMessage liveValidateMessage--visible']")
+        assert error_message.text == "Username cannot exceed 30 characters.", "Text is not valid"
+
+        # Close driver
+        driver.close()
+
+    def test_fill_special_symb_username(self):
+        """
+        - Create driver
+        - Open start page
+        - Filling special symbols username field
+        - Fill field random Email
+        - Fill field  password
+        - Click on 'Sign up for OurApp' button
+        - Verifying error message
+        """
+
+        # Create driver
+        driver = WebDriver(executable_path="chromedriver")
+
+        # Open start page
+        self.log.info("Opening start page")
+        driver.get("https://qa-complex-app-for-testing.herokuapp.com/")
+
+        # Fill field random 31 symbols username
+        self.log.info("Filling special symbols username field")
+        # - Find element
+        username_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Pick a username']")
+        username_field.send_keys("test!")
+        sleep(1)
+
+        # Fill field random Email
+        self.log.info("Filling email field")
+        # - Find element
+        email_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='you@example.com']")
+        email = random_symbol("Test", 10) + "@yopmail.com"
+        email_field.send_keys(email)
+        sleep(1)
+
+        # Fill field  password
+        self.log.info("Filling password field")
+        # - Find element
+        password_field = driver.find_element(by=By.XPATH, value=".//input[@placeholder='Create a password']")
+        password_field.send_keys("P@ssw0rdP@ssw0rd")
+        sleep(1)
+
+        # Click on 'Sign up for OurApp' button
+        self.log.info("Going to click 'Sign up for OurApp' button")
+        driver.find_element(by=By.XPATH, value=".//button[text()='Sign up for OurApp']").click()
+        sleep(1)
+
+        # Verify error message
+        self.log.info("Verifying error message")
+        error_message = driver.find_element(by=By.XPATH,
+                                            value=".//div[@class='alert alert-danger small liveValidateMessage liveValidateMessage--visible']")
+        assert error_message.text == "Username can only contain letters and numbers.", "Text is not valid"
+
+        # Close driver
+        driver.close()
