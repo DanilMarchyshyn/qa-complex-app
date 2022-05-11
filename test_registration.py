@@ -339,5 +339,3 @@ class TestStartPage:
 
         # Close driver
         driver.close()
-
-    # skdl;gj;laskdjf
