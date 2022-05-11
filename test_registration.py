@@ -339,3 +339,5 @@ class TestStartPage:
 
         # Close driver
         driver.close()
+
+        # end
