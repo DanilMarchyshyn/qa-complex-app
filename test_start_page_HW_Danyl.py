@@ -1,9 +1,11 @@
 import logging
+from time import sleep
 
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
 
 from constants.base import BaseConstants
+from pages.start_page_HW_Danyl import StartPageHwDanyl
 from pages.start_page import StartPage
 from pages.utils import User
 
@@ -14,60 +16,20 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def start_page(self):
         driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
-        driver.implicitly_wait(3)
         driver.get(BaseConstants.BASE_URL)
-        yield StartPage(driver)
+        yield StartPageHwDanyl(driver)
         driver.close()
 
     @pytest.fixture(scope="function")
     def random_user(self):
-        user = User()
-        user.fill_properties()
-        return user
+        return User()
 
     @pytest.fixture(scope="function")
     def registered_user(self, start_page, random_user):
         start_page.sign_up(random_user)
+        sleep(1)
         start_page.logout()
         return random_user
-
-    def test_empty_fields_login(self, start_page):
-        """
-        - Pre-conditions:
-            - Create driver
-            - Open start page
-        - Steps:
-            - Clear field login
-            - Clear field password
-            - Click on 'Sign In' button
-            - Verify error message
-        """
-        # Clear field login
-        # Clear field password
-        # Click on 'Sign In' button
-        start_page.sign_in(User())
-
-        # Verify error message
-        start_page.verify_sign_in_error()
-
-    def test_invalid_login(self, start_page, random_user):
-        """
-        - Pre-conditions:
-            - Create driver
-            - Open start page
-        - Steps:
-            - Fill field login
-            - Fill field password
-            - Click on 'Sign In' button
-            - Verify error message
-        """
-        # Fill field login
-        # Fill field password
-        # Click on 'Sign In' button
-        start_page.sign_in(random_user)
-
-        # Verify error message
-        start_page.verify_sign_in_error()
 
     def test_register(self, start_page, random_user):
         """
@@ -81,24 +43,12 @@ class TestStartPage:
         # Fill email, login and password fields
         # Click on Sign Up button
         start_page.sign_up(random_user)
+        self.log.info("User was registered")
+        sleep(1)
 
         # Verify registration is successful
         start_page.verify_success_sign_up(username=random_user.username)
-
-    def test_sign_in(self, start_page, registered_user):
-        """
-        - Pre-conditions:
-            - Sign up as a user
-            - Logout
-        - Steps:
-            - Sign in as the user
-            - Verify the result
-        """
-        # Sign in as the user
-        start_page.sign_in(registered_user)
-
-        # Verify the result
-        start_page.verify_success_sign_up(username=registered_user.username)
+        self.log.info("Registration for user '%s' was success and verified", random_user.username)
 
     def test_fill_2symbols_username(self, start_page, random_user):
         start_page.input_2symbols_field_username(random_user)
@@ -113,9 +63,11 @@ class TestStartPage:
         start_page.verify_error_message_31symbols_field_username()
 
     def test_fill_with_space_username(self, start_page, random_user):
+        "A 1"
         start_page.input_space_field_username(random_user)
         start_page.verify_error_message_only_characters_field_username()
 
     def test_fill_with_special_symbols_username(self, start_page, random_user):
+        """!@#$%"""
         start_page.input_special_symbol_field_username(random_user)
         start_page.verify_error_message_only_characters_field_username()

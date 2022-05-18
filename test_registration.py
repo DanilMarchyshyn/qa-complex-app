@@ -6,6 +6,10 @@ from time import sleep
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 
+from constants.base import BaseConstants
+from pages.start_page import StartPage
+from pages.utils import User
+
 
 def random_symbol(prefix, maxlen):
     symbols = string.ascii_letters + string.digits
@@ -14,6 +18,24 @@ def random_symbol(prefix, maxlen):
 
 class TestStartPage:
     log = logging.getLogger("[StartPage]")
+
+    @pytest.fixture(scope="function")
+    def start_page(self):
+        driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
+        driver.get(BaseConstants.BASE_URL)
+        yield StartPage(driver)
+        driver.close()
+
+    @pytest.fixture(scope="function")
+    def random_user(self):
+        return User()
+
+    @pytest.fixture(scope="function")
+    def registered_user(self, start_page, random_user):
+        start_page.sign_up(random_user)
+        sleep(1)
+        start_page.logout()
+        return random_user
 
     def test_registration(self):
         """
@@ -71,13 +93,15 @@ class TestStartPage:
 
     def test_fill_2symbols_username(self):
         """
-        - Create driver
-        - Open start page
-        - Fill 2 symbols on field username
-        - Fill field random Email
-        - Fill field  password
-        - Click on 'Sign up for OurApp' button
-        - Verifying error message
+        Preconditions:
+            - Create driver
+            - Open start page
+        Steps:
+            - Fill 2 symbols on field username
+            - Fill field random Email
+            - Fill field  password
+            - Click on 'Sign up for OurApp' button
+            - Verifying error message
         """
 
         # Create driver
