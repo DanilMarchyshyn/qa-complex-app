@@ -1,6 +1,6 @@
 from time import sleep
 
-# from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By
 
 from constants.start_page import StartPageConstants
 from pages.base_page import BasePage
@@ -49,14 +49,14 @@ class StartPage(BasePage):
         self.fill_field(xpath=self.constants.SIGN_UP_USERNAME_XPATH, value=user.username2sym)
         self.fill_field(xpath=self.constants.SIGN_UP_EMAIL_XPATH, value=user.email)
         self.fill_field(xpath=self.constants.SIGN_UP_PASSWORD_XPATH, value=user.password)
-        sleep(1)
+        self.wait_until_displayed(xpath=self.constants.ERROR_MESSAGE_3_CHARACTERS_TEXT)
         self.click(xpath=self.constants.SIGN_UP_BUTTON_XPATH)
 
     def input_empty_field_username(self, user):
         self.fill_field(xpath=self.constants.SIGN_UP_USERNAME_XPATH, value=user.usernameempty)
         self.fill_field(xpath=self.constants.SIGN_UP_EMAIL_XPATH, value=user.email)
         self.fill_field(xpath=self.constants.SIGN_UP_PASSWORD_XPATH, value=user.password)
-        sleep(1)
+        self.wait_until_displayed(xpath=self.constants.ERROR_MESSAGE_3_CHARACTERS_TEXT)
         self.click(xpath=self.constants.SIGN_UP_BUTTON_XPATH)
 
     def input_31symbols_field_username(self, user):
