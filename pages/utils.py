@@ -1,3 +1,4 @@
+import logging
 import random
 import string
 
@@ -15,6 +16,18 @@ def random_str(length=5):
 def random_spc(length=5):
     """Generate random special symbols"""
     return ''.join(random.choice(string.punctuation) for _ in range(length))
+
+
+def log_wrapper(func):
+    """Add logs for method using docsting"""
+
+    def wrapper(*args, **kwargs):
+        log = logging.getLogger("[LogDecorator]")
+        result = func(*args, **kwargs)
+        log.info(f"{func.__doc__}")
+        return result
+
+    return wrapper
 
 
 class User:

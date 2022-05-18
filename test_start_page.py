@@ -1,5 +1,4 @@
 import logging
-from time import sleep
 
 import pytest
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -15,18 +14,20 @@ class TestStartPage:
     @pytest.fixture(scope="function")
     def start_page(self):
         driver = WebDriver(executable_path=BaseConstants.DRIVER_PATH)
+        driver.implicitly_wait(3)
         driver.get(BaseConstants.BASE_URL)
         yield StartPage(driver)
         driver.close()
 
     @pytest.fixture(scope="function")
     def random_user(self):
-        return User()
+        user = User()
+        user.fill_properties()
+        return user
 
     @pytest.fixture(scope="function")
     def registered_user(self, start_page, random_user):
         start_page.sign_up(random_user)
-        sleep(1)
         start_page.logout()
         return random_user
 
@@ -44,12 +45,10 @@ class TestStartPage:
         # Clear field login
         # Clear field password
         # Click on 'Sign In' button
-        start_page.sign_in()
-        self.log.info("Empty string user tried to signed in")
+        start_page.sign_in(User())
 
         # Verify error message
         start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
 
     def test_invalid_login(self, start_page, random_user):
         """
@@ -65,12 +64,10 @@ class TestStartPage:
         # Fill field login
         # Fill field password
         # Click on 'Sign In' button
-        start_page.sign_in(username=random_user.username, password=random_user.password)
-        self.log.info("Empty string user tried to signed in")
+        start_page.sign_in(random_user)
 
         # Verify error message
         start_page.verify_sign_in_error()
-        self.log.info("Error was verified")
 
     def test_register(self, start_page, random_user):
         """
@@ -84,12 +81,9 @@ class TestStartPage:
         # Fill email, login and password fields
         # Click on Sign Up button
         start_page.sign_up(random_user)
-        self.log.info("User was registered")
-        sleep(1)
 
         # Verify registration is successful
         start_page.verify_success_sign_up(username=random_user.username)
-        self.log.info("Registration for user '%s' was success and verified", random_user.username)
 
     def test_sign_in(self, start_page, registered_user):
         """
@@ -100,11 +94,11 @@ class TestStartPage:
             - Sign in as the user
             - Verify the result
         """
-        start_page.sign_in(username=registered_user.username, password=registered_user.password)
-        self.log.info("User '%s' signed in", registered_user.username)
+        # Sign in as the user
+        start_page.sign_in(registered_user)
 
+        # Verify the result
         start_page.verify_success_sign_up(username=registered_user.username)
-        self.log.info("Message was verified")
 
     def test_fill_2symbols_username(self, start_page, random_user):
         start_page.input_2symbols_field_username(random_user)
