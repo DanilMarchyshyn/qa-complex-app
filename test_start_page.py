@@ -105,3 +105,23 @@ class TestStartPage:
 
         start_page.verify_success_sign_up(username=registered_user.username)
         self.log.info("Message was verified")
+
+    def test_fill_2symbols_username(self, start_page, random_user):
+        start_page.input_2symbols_field_username(random_user)
+        start_page.verify_error_message_3symbols_field_username()
+
+    def test_fill_empty_username(self, start_page, random_user):
+        start_page.input_empty_field_username(random_user)
+        start_page.verify_error_message_3symbols_field_username()
+
+    def test_fill_more_30sym_username(self, start_page, random_user):
+        start_page.input_31symbols_field_username(random_user)
+        start_page.verify_error_message_31symbols_field_username()
+
+    def test_fill_with_space_username(self, start_page, random_user):
+        start_page.input_space_field_username(random_user)
+        start_page.verify_error_message_only_characters_field_username()
+
+    def test_fill_with_special_symbols_username(self, start_page, random_user):
+        start_page.input_special_symbol_field_username(random_user)
+        start_page.verify_error_message_only_characters_field_username()
